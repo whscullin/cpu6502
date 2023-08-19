@@ -2,32 +2,38 @@ import { MemoryPages, byte } from '../../js/types';
 import { assertByte } from './asserts';
 
 export class Program implements MemoryPages {
-    private data: Buffer;
+  private data: Buffer;
 
-    constructor(private page: byte, code: byte[]) {
-        this.data = Buffer.from(code);
-    }
+  constructor(
+    private page: byte,
+    code: byte[],
+  ) {
+    this.data = Buffer.from(code);
+  }
 
-    start() {
-        return this.page;
-    }
+  start() {
+    return this.page;
+  }
 
-    end() {
-        return this.page;
-    }
+  end() {
+    return this.page;
+  }
 
-    read(page: byte, off: byte) {
-        assertByte(page);
-        assertByte(off);
-        return this.data[off];
-    }
+  read(page: byte, off: byte) {
+    assertByte(page);
+    assertByte(off);
+    return this.data[off];
+  }
 
-    write(_page: byte, _off: byte, _val: byte) {
-        // do nothing
-    }
+  write(_page: byte, _off: byte, _val: byte) {
+    // do nothing
+  }
 }
 
-export const bios = new Program(0xff, [
+// prettier-ignore
+export const bios = new Program(
+  0xff,
+  [
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -60,4 +66,5 @@ export const bios = new Program(0xff, [
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0xff, 0x00, 0x04, 0x00, 0xff
-]);
+  ],
+);

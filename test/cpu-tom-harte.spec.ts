@@ -30,40 +30,40 @@ type MemoryValue = [address: word, value: byte];
 /**
  * Represents initial and final CPU and memory states
  */
- interface TestState {
-    /** Program counter */
-    pc: word;
-    /** Stack register */
-    s: byte;
-    /** Accumulator */
-    a: byte;
-    /** X index */
-    x: byte;
-    /** Y index */
-    y: byte;
-    /** Processor status register */
-    p: byte;
-    /** M */
-    ram: MemoryValue[];
+interface TestState {
+  /** Program counter */
+  pc: word;
+  /** Stack register */
+  s: byte;
+  /** Accumulator */
+  a: byte;
+  /** X index */
+  x: byte;
+  /** Y index */
+  y: byte;
+  /** Processor status register */
+  p: byte;
+  /** M */
+  ram: MemoryValue[];
 }
 
 /**
  * CPU cycle memory operation
  */
-type Cycle = [address: word, value: byte, type: 'read'|'write'];
+type Cycle = [address: word, value: byte, type: 'read' | 'write'];
 
 /**
  * One test record
  */
 interface Test {
-    /** Test name */
-    name: string;
-    /** Initial CPU register and memory state */
-    initial: TestState;
-    /**  Final CPU register and memory state */
-    final: TestState;
-    /** Detailed CPU cycles */
-    cycles: Cycle[];
+  /** Test name */
+  name: string;
+  /** Initial CPU register and memory state */
+  initial: TestState;
+  /**  Final CPU register and memory state */
+  final: TestState;
+  /** Detailed CPU cycles */
+  cycles: Cycle[];
 }
 
 /**
@@ -73,13 +73,13 @@ interface Test {
  * @param state Initial test state
  */
 function initState(cpu: CPU6502, state: TestState) {
-    const { pc, s, a, x, y, p, ram } = state;
-    cpu.setState({ cycles: 0, pc, sp: s, a, x, y, s: p });
+  const { pc, s, a, x, y, p, ram } = state;
+  cpu.setState({ cycles: 0, pc, sp: s, a, x, y, s: p });
 
-    for (let idx = 0; idx < ram.length; idx++) {
-        const [address, mem] = ram[idx];
-        cpu.write(address, mem);
-    }
+  for (let idx = 0; idx < ram.length; idx++) {
+    const [address, mem] = ram[idx];
+    cpu.write(address, mem);
+  }
 }
 
 /**
@@ -89,11 +89,11 @@ function initState(cpu: CPU6502, state: TestState) {
  * @returns string or raw test data
  */
 function toAddrValHex([address, val]: MemoryValue) {
-    if (detail) {
-        return `${toHex(address, 4)}: ${toHex(val)}`;
-    } else {
-        return [address, val];
-    }
+  if (detail) {
+    return `${toHex(address, 4)}: ${toHex(val)}`;
+  } else {
+    return [address, val];
+  }
 }
 
 /**
@@ -103,11 +103,11 @@ function toAddrValHex([address, val]: MemoryValue) {
  * @returns string or raw test data
  */
 function toAddrValHexType([address, val, type]: Cycle) {
-    if (detail) {
-        return `${toHex(address, 4)}: ${toHex(val)} ${type}`;
-    } else {
-        return [address, val, type];
-    }
+  if (detail) {
+    return `${toHex(address, 4)}: ${toHex(val)} ${type}`;
+  } else {
+    return [address, val, type];
+  }
 }
 
 /**
@@ -118,36 +118,28 @@ function toAddrValHexType([address, val, type]: Cycle) {
  * @param test Test data to compare against
  */
 function expectState(cpu: CPU6502, memory: TestMemory, test: Test) {
-    const { pc, s, a, x, y, p, ram } = test.final;
-    expect(
-        toReadableState(cpu.getState())
-    ).toEqual(
-        toReadableState({cycles: test.cycles.length, pc, sp: s, a, x, y, s: p })
-    );
+  const { pc, s, a, x, y, p, ram } = test.final;
+  expect(toReadableState(cpu.getState())).toEqual(
+    toReadableState({ cycles: test.cycles.length, pc, sp: s, a, x, y, s: p }),
+  );
 
-    // Retrieve relevant memory locations and values
-    const result: [addr: word, val: byte][] = [];
-    for (let idx = 0; idx < ram.length; idx++) {
-        const [address] = ram[idx];
-        result.push([address, cpu.read(address)]);
-    }
-    expect(
-        result.map(toAddrValHex)
-    ).toEqual(
-        ram.map(toAddrValHex)
-    );
+  // Retrieve relevant memory locations and values
+  const result: [addr: word, val: byte][] = [];
+  for (let idx = 0; idx < ram.length; idx++) {
+    const [address] = ram[idx];
+    result.push([address, cpu.read(address)]);
+  }
+  expect(result.map(toAddrValHex)).toEqual(ram.map(toAddrValHex));
 
-    expect(
-        memory.getLog().map(toAddrValHexType)
-    ).toEqual(
-        test.cycles.map(toAddrValHexType)
-    );
+  expect(memory.getLog().map(toAddrValHexType)).toEqual(
+    test.cycles.map(toAddrValHexType),
+  );
 }
 
 interface OpTest {
-    op: string;
-    name: string;
-    mode: string;
+  op: string;
+  name: string;
+  mode: string;
 }
 
 const testPath = process.env.TOM_HARTE_TEST_PATH;
@@ -157,128 +149,180 @@ const testPath = process.env.TOM_HARTE_TEST_PATH;
 const maxTests = 16;
 
 if (testPath) {
-    const testPath6502 = `${testPath}/6502/v1/`;
-    const testPathWDC65C02 = `${testPath}/wdc65c02/v1/`;
-    const testPathRW65C02 = `${testPath}/rockwell65c02/v1/`;
+  const testPath6502 = `${testPath}/6502/v1/`;
+  const testPathWDC65C02 = `${testPath}/wdc65c02/v1/`;
+  const testPathRW65C02 = `${testPath}/rockwell65c02/v1/`;
 
-    const opAry6502: OpTest[] = [];
-    const opAryRW65C02: OpTest[] = [];
-    const opAryWDC65C02: OpTest[] = [];
+  const opAry6502: OpTest[] = [];
+  const opAryRW65C02: OpTest[] = [];
+  const opAryWDC65C02: OpTest[] = [];
 
-    const buildOpArrays = () => {
-        const cpu = new CPU6502();
+  const buildOpArrays = () => {
+    const cpu = new CPU6502();
 
-        for (const op in cpu.OPS_6502) {
-            const { name, mode } = cpu.OPS_6502[op];
-            const test = { op: toHex(+op), name, mode };
-            opAry6502.push(test);
-            opAryRW65C02.push(test);
-            opAryWDC65C02.push(test);
-        }
+    for (const op in cpu.OPS_6502) {
+      const { name, mode } = cpu.OPS_6502[op];
+      const test = { op: toHex(+op), name, mode };
+      opAry6502.push(test);
+      opAryRW65C02.push(test);
+      opAryWDC65C02.push(test);
+    }
 
-        for (const op in cpu.OPS_NMOS_6502) {
-            const { name, mode } = cpu.OPS_NMOS_6502[op];
-            const test = { op: toHex(+op), name, mode };
-            opAry6502.push(test);
-        }
+    for (const op in cpu.OPS_NMOS_6502) {
+      const { name, mode } = cpu.OPS_NMOS_6502[op];
+      const test = { op: toHex(+op), name, mode };
+      opAry6502.push(test);
+    }
 
-        for (const op in cpu.OPS_65C02) {
-            const { name, mode } = cpu.OPS_65C02[op];
-            const test = { op: toHex(+op), name, mode };
-            opAryRW65C02.push(test);
-            opAryWDC65C02.push(test);
-        }
+    for (const op in cpu.OPS_65C02) {
+      const { name, mode } = cpu.OPS_65C02[op];
+      const test = { op: toHex(+op), name, mode };
+      opAryRW65C02.push(test);
+      opAryWDC65C02.push(test);
+    }
 
-        // WDC 65C02 NOPs
-        [
-            '03', '0b', '13', '1b', '23', '2b', '33', '3b',
-            '43', '4b', '53', '5b', '63', '6b', '73', '7b',
-            '83', '8b', '93', '9b', 'a3', 'ab', 'b3', 'bb',
-            'c3',       'd3',       'e3', 'eb', 'f3', 'fb'
-        ].forEach((op) =>
-            opAryWDC65C02.push({ op, name: 'nop', mode: 'implied'})
-        );
+    // WDC 65C02 NOPs
+    [
+      '03',
+      '0b',
+      '13',
+      '1b',
+      '23',
+      '2b',
+      '33',
+      '3b',
+      '43',
+      '4b',
+      '53',
+      '5b',
+      '63',
+      '6b',
+      '73',
+      '7b',
+      '83',
+      '8b',
+      '93',
+      '9b',
+      'a3',
+      'ab',
+      'b3',
+      'bb',
+      'c3',
+      'd3',
+      'e3',
+      'eb',
+      'f3',
+      'fb',
+    ].forEach((op) => opAryWDC65C02.push({ op, name: 'nop', mode: 'implied' }));
 
-        // Rockwell 65C02 NOPs
-        [
-            '03', '0b', '13', '1b', '23', '2b', '33', '3b',
-            '43', '4b', '53', '5b', '63', '6b', '73', '7b',
-            '83', '8b', '93', '9b', 'a3', 'ab', 'b3', 'bb',
-            'c3', 'cb', 'd3', 'db', 'e3', 'eb', 'f3', 'fb'
-        ].forEach((op) =>
-            opAryRW65C02.push({ op, name: 'nop', mode: 'implied'})
-        );
-    };
+    // Rockwell 65C02 NOPs
+    [
+      '03',
+      '0b',
+      '13',
+      '1b',
+      '23',
+      '2b',
+      '33',
+      '3b',
+      '43',
+      '4b',
+      '53',
+      '5b',
+      '63',
+      '6b',
+      '73',
+      '7b',
+      '83',
+      '8b',
+      '93',
+      '9b',
+      'a3',
+      'ab',
+      'b3',
+      'bb',
+      'c3',
+      'cb',
+      'd3',
+      'db',
+      'e3',
+      'eb',
+      'f3',
+      'fb',
+    ].forEach((op) => opAryRW65C02.push({ op, name: 'nop', mode: 'implied' }));
+  };
 
-    buildOpArrays();
+  buildOpArrays();
 
-    describe('Tom Harte', function() {
-        let cpu: CPU6502;
-        let memory: TestMemory;
+  describe('Tom Harte', function () {
+    let cpu: CPU6502;
+    let memory: TestMemory;
 
-        describe('NMOS 6502', function() {
-            beforeAll(function() {
-                cpu = new CPU6502();
-                memory = new TestMemory(256);
-                cpu.addPageHandler(memory);
-            });
+    describe('NMOS 6502', function () {
+      beforeAll(function () {
+        cpu = new CPU6502();
+        memory = new TestMemory(256);
+        cpu.addPageHandler(memory);
+      });
 
-            describe.each(opAry6502)('Test op $op $name $mode', ({op}) => {
-                const data = fs.readFileSync(`${testPath6502}${op}.json`, 'utf-8');
-                const tests = JSON.parse(data) as Test[];
+      describe.each(opAry6502)('Test op $op $name $mode', ({ op }) => {
+        const data = fs.readFileSync(`${testPath6502}${op}.json`, 'utf-8');
+        const tests = JSON.parse(data) as Test[];
 
-                it.each(tests.slice(0, maxTests))('Test $name', (test) => {
-                    initState(cpu, test.initial);
-                    memory.logStart();
-                    cpu.step();
-                    memory.logStop();
-                    expectState(cpu, memory, test);
-                });
-            });
+        it.each(tests.slice(0, maxTests))('Test $name', (test) => {
+          initState(cpu, test.initial);
+          memory.logStart();
+          cpu.step();
+          memory.logStop();
+          expectState(cpu, memory, test);
         });
-
-        describe('Rockwell 65C02', function() {
-            beforeAll(function() {
-                cpu = new CPU6502({ flavor: FLAVOR_ROCKWELL_65C02 });
-                memory = new TestMemory(256);
-                cpu.addPageHandler(memory);
-            });
-
-            describe.each(opAryRW65C02)('Test op $op $name $mode', ({op}) => {
-                const data = fs.readFileSync(`${testPathRW65C02}${op}.json`, 'utf-8');
-                const tests = JSON.parse(data) as Test[];
-
-                it.each(tests.slice(0, maxTests))('Test $name', (test) => {
-                    initState(cpu, test.initial);
-                    memory.logStart();
-                    cpu.step();
-                    memory.logStop();
-                    expectState(cpu, memory, test);
-                });
-            });
-        });
-
-        describe('WDC 65C02', function() {
-            beforeAll(function() {
-                cpu = new CPU6502({ flavor: FLAVOR_WDC_65C02 });
-                memory = new TestMemory(256);
-                cpu.addPageHandler(memory);
-            });
-
-            describe.each(opAryWDC65C02)('Test op $op $name $mode', ({op}) => {
-                const data = fs.readFileSync(`${testPathWDC65C02}${op}.json`, 'utf-8');
-                const tests = JSON.parse(data) as Test[];
-
-                it.each(tests.slice(0, maxTests))('Test $name', (test) => {
-                    initState(cpu, test.initial);
-                    memory.logStart();
-                    cpu.step();
-                    memory.logStop();
-                    expectState(cpu, memory, test);
-                });
-            });
-        });
+      });
     });
+
+    describe('Rockwell 65C02', function () {
+      beforeAll(function () {
+        cpu = new CPU6502({ flavor: FLAVOR_ROCKWELL_65C02 });
+        memory = new TestMemory(256);
+        cpu.addPageHandler(memory);
+      });
+
+      describe.each(opAryRW65C02)('Test op $op $name $mode', ({ op }) => {
+        const data = fs.readFileSync(`${testPathRW65C02}${op}.json`, 'utf-8');
+        const tests = JSON.parse(data) as Test[];
+
+        it.each(tests.slice(0, maxTests))('Test $name', (test) => {
+          initState(cpu, test.initial);
+          memory.logStart();
+          cpu.step();
+          memory.logStop();
+          expectState(cpu, memory, test);
+        });
+      });
+    });
+
+    describe('WDC 65C02', function () {
+      beforeAll(function () {
+        cpu = new CPU6502({ flavor: FLAVOR_WDC_65C02 });
+        memory = new TestMemory(256);
+        cpu.addPageHandler(memory);
+      });
+
+      describe.each(opAryWDC65C02)('Test op $op $name $mode', ({ op }) => {
+        const data = fs.readFileSync(`${testPathWDC65C02}${op}.json`, 'utf-8');
+        const tests = JSON.parse(data) as Test[];
+
+        it.each(tests.slice(0, maxTests))('Test $name', (test) => {
+          initState(cpu, test.initial);
+          memory.logStart();
+          cpu.step();
+          memory.logStop();
+          expectState(cpu, memory, test);
+        });
+      });
+    });
+  });
 } else {
-    test('Skipping Tom Harte tests', () => { expect(testPath).toBeFalsy(); });
+  test('Skipping Tom Harte tests', () => {
+    expect(testPath).toBeFalsy();
+  });
 }
