@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "lib": ["DOM", "ES2016"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "allowJs": true,
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "types/*"
+      ],
+      "js/*": [
+          "js/*"
+      ],
+      "test/*": [
+          "test/*"
+      ]
+    }
+  },
+  "include": [
+      "js/**/*",
+      "test/**/*",
+  ]
+}

@@ -126,7 +126,7 @@ function expectState(cpu: CPU6502, memory: TestMemory, test: Test) {
     );
 
     // Retrieve relevant memory locations and values
-    const result = [];
+    const result: [addr: word, val: byte][] = [];
     for (let idx = 0; idx < ram.length; idx++) {
         const [address] = ram[idx];
         result.push([address, cpu.read(address)]);

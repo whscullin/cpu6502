@@ -181,7 +181,7 @@ export default class CPU6502 {
     private sp: byte = 0xff;
 
     /** Current instruction */
-    private op: Instruction;
+    private op: Instruction | undefined;
     /** Last accessed memory address */
     private addr: word = 0;
 
@@ -293,7 +293,7 @@ export default class CPU6502 {
                 const bin = c & 0xff;
                 n = bin >> 7;
                 z = !bin;
-                if (this.op.mode === 'immediate') {
+                if (this.op?.mode === 'immediate') {
                     if (this.flavor === FLAVOR_WDC_65C02) {
                         this.readByte(sub ? 0xB8 : 0x7F);
                     } else { // rockwell65c02

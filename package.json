@@ -1,0 +1,37 @@
+{
+  "name": "@whscullin/cpu6502",
+  "version": "0.0.1",
+  "description": "Typescript 6502",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build clean",
+    "lint": "eslint js test",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/whscullin/cpu6502.git"
+  },
+  "keywords": [
+    "Typescript",
+    "6502"
+  ],
+  "author": "scullin@scullinsteel.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/whscullin/cpu6502/issues"
+  },
+  "homepage": "https://github.com/whscullin/cpu6502#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.6.2",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
+  }
+}
