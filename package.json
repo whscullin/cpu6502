@@ -2,7 +2,7 @@
   "name": "@whscullin/cpu6502",
   "version": "0.0.1",
   "description": "Typescript 6502",
-  "main": "dist/index.js",
+  "main": "dist/js/index.js",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build clean",
