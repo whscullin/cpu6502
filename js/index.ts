@@ -3,4 +3,4 @@ import Debugger from './debugger';
 
 export { CPU6502, Debugger };
 
-export { Memory, MemoryPages, byte, word } from './types';
+export { Memory, MemoryPages, byte, memory, word } from './types';

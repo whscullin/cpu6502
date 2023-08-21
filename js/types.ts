@@ -15,7 +15,7 @@ export type byte = number;
 export type word = number;
 
 /** A raw region of memory. */
-export type memory = Uint8Array;
+export type memory = Uint8Array | byte[];
 
 export interface Memory {
   /** Read a byte. */
