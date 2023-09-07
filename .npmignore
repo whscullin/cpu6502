@@ -1,2 +1,8 @@
+.editorconfig
+.eslintrc.json
+.github
 docs
+jest.config.js
 test
+tsconfig.json
+
