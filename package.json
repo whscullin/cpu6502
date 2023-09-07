@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build clean",
+    "docs": "npx typedoc --excludePrivate js",
     "lint": "eslint js test",
     "test": "jest"
   },
