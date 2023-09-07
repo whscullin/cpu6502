@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 
-import CPU6502, { FLAVOR_ROCKWELL_65C02, FLAVOR_WDC_65C02 } from 'js/cpu6502';
+import { CPU6502, FLAVOR_ROCKWELL_65C02, FLAVOR_WDC_65C02 } from 'js/cpu6502';
 import { toHex } from 'js/util';
 import type { byte, word } from 'js/types';
 

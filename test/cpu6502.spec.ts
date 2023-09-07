@@ -1,4 +1,4 @@
-import CPU6502, { CpuState, FLAVOR_ROCKWELL_65C02, flags } from '../js/cpu6502';
+import { CPU6502, CpuState, FLAVOR_ROCKWELL_65C02, flags } from '../js/cpu6502';
 import { TestMemory } from './util/memory';
 import { bios, Program } from './util/bios';
 import { toReadableState } from './util/cpu';

@@ -1,21 +1,39 @@
 import { debug, toHex } from './util';
 import { byte, word } from './types';
 
-import CPU6502, { DebugInfo, flags, sizes } from './cpu6502';
+import { CPU6502, DebugInfo, flags, sizes } from './cpu6502';
 
+/**
+ * Interface used to communicate between the debugger and the
+ * controlling application.
+ */
 export interface DebuggerContainer {
   run: () => void;
   stop: () => void;
   isRunning: () => boolean;
 }
 
-type symbols = { [key: number]: string };
-type breakpointFn = (info: DebugInfo) => boolean;
+/**
+ * A mapping of memory value to string identifier for debugging purposes.
+ */
+export type symbols = { [key: number]: string };
+
+/**
+ * A method called to determine if a breakpoint should be triggered.
+ */
+export type breakpointFn = (info: DebugInfo) => boolean;
 
 const alwaysBreak = (_info: DebugInfo) => {
   return true;
 };
 
+/**
+ * Converts a status register value into the well known string version
+ * of the status register.
+ *
+ * @param sr Status register value
+ * @returns Status register value as a string
+ */
 export const dumpStatusRegister = (sr: byte) =>
   [
     sr & flags.N ? 'N' : '-',
@@ -28,7 +46,11 @@ export const dumpStatusRegister = (sr: byte) =>
     sr & flags.C ? 'C' : '-',
   ].join('');
 
-export default class Debugger {
+/**
+ * Class that can be used to wrap the CPU6502 object to provide
+ * additional support for stepping, tracing and setting breakpoints.
+ */
+export class Debugger {
   private verbose = false;
   private maxTrace = 256;
   private trace: DebugInfo[] = [];
