@@ -210,7 +210,7 @@ export class CPU6502 {
   private sp: byte = 0xff;
 
   /** Current instruction */
-  private op: Instruction | undefined;
+  private op: Instruction;
   /** Last accessed memory address */
   private addr: word = 0;
 
@@ -279,6 +279,8 @@ export class CPU6502 {
     for (let idx = 0; idx < 0x100; idx++) {
       this.opary[idx] = ops[idx] || this.unknown(idx);
     }
+
+    this.op = this.opary[0xea];
   }
 
   /**
@@ -331,7 +333,7 @@ export class CPU6502 {
         const bin = c & 0xff;
         n = bin >> 7;
         z = !bin;
-        if (this.op?.mode === 'immediate') {
+        if (this.op.mode === 'immediate') {
           if (this.flavor === FLAVOR_WDC_65C02) {
             this.readByte(sub ? 0xb8 : 0x7f);
           } else {
@@ -3095,37 +3097,37 @@ export class CPU6502 {
     // SKW
     0x0c: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsolute),
+      fn: () => this.skp(this.readAbsolute),
       mode: 'absolute',
     },
     0x1c: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
     0x3c: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
     0x5c: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
     0x7c: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
     0xdc: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
     0xfc: {
       name: 'SKW',
-      fn: () => this.skp(this.readAddrAbsoluteX),
+      fn: () => this.skp(this.readAbsoluteX),
       mode: 'absoluteX',
     },
 
