@@ -8,6 +8,7 @@
     "clean": "tsc --build clean",
     "docs": "npx typedoc --excludePrivate js",
     "lint": "eslint js test",
+    "postinstall": "npm run build",
     "test": "jest"
   },
   "repository": {
