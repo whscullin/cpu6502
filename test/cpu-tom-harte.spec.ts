@@ -120,7 +120,15 @@ function toAddrValHexType([address, val, type]: Cycle) {
 function expectState(cpu: CPU6502, memory: TestMemory, test: Test) {
   const { pc, s, a, x, y, p, ram } = test.final;
   expect(toReadableState(cpu.getState())).toEqual(
-    toReadableState({ cycles: test.cycles.length, pc, sp: s, a, x, y, s: p }),
+    toReadableState({
+      cycles: test.cycles.length,
+      pc,
+      sp: s,
+      a,
+      x,
+      y,
+      s: p,
+    }),
   );
 
   // Retrieve relevant memory locations and values

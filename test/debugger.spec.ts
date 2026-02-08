@@ -41,7 +41,7 @@ describe('Debugger', () => {
     it('should dump page', () => {
       const page = theDebugger.dumpPage(0xff);
       expect(page).toContain(
-        'FF80: 48 45 4C 4C 4F 0D 00 00 00 00 00 00 00 00 00 00         HELLO...........'
+        'FF80: 48 45 4C 4C 4F 0D 00 00 00 00 00 00 00 00 00 00         HELLO...........',
       );
     });
 
