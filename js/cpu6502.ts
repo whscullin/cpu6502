@@ -1593,7 +1593,7 @@ export class CPU6502 {
     const b = this.read(this.pc);
     const op = this.opary[b];
     const size = sizes[op.mode];
-    const cmd = new Array(size);
+    const cmd: byte[] = new Array<byte>(size);
     cmd[0] = b;
     for (let idx = 1; idx < size; idx++) {
       cmd[idx] = this.read(this.pc + idx);
@@ -2447,7 +2447,11 @@ export class CPU6502 {
     0xb8: { name: 'CLV', fn: () => this.clr(flags.V), mode: 'implied' },
 
     // NOP
-    0xea: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
+    0xea: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
 
     // BRK
     0x00: {
@@ -2537,23 +2541,87 @@ export class CPU6502 {
     },
 
     // BBR/BBS
-    0x0f: { name: 'BBR0', fn: () => this.bbr(0), mode: 'zeroPage_relative' },
-    0x1f: { name: 'BBR1', fn: () => this.bbr(1), mode: 'zeroPage_relative' },
-    0x2f: { name: 'BBR2', fn: () => this.bbr(2), mode: 'zeroPage_relative' },
-    0x3f: { name: 'BBR3', fn: () => this.bbr(3), mode: 'zeroPage_relative' },
-    0x4f: { name: 'BBR4', fn: () => this.bbr(4), mode: 'zeroPage_relative' },
-    0x5f: { name: 'BBR5', fn: () => this.bbr(5), mode: 'zeroPage_relative' },
-    0x6f: { name: 'BBR6', fn: () => this.bbr(6), mode: 'zeroPage_relative' },
-    0x7f: { name: 'BBR7', fn: () => this.bbr(7), mode: 'zeroPage_relative' },
+    0x0f: {
+      name: 'BBR0',
+      fn: () => this.bbr(0),
+      mode: 'zeroPage_relative',
+    },
+    0x1f: {
+      name: 'BBR1',
+      fn: () => this.bbr(1),
+      mode: 'zeroPage_relative',
+    },
+    0x2f: {
+      name: 'BBR2',
+      fn: () => this.bbr(2),
+      mode: 'zeroPage_relative',
+    },
+    0x3f: {
+      name: 'BBR3',
+      fn: () => this.bbr(3),
+      mode: 'zeroPage_relative',
+    },
+    0x4f: {
+      name: 'BBR4',
+      fn: () => this.bbr(4),
+      mode: 'zeroPage_relative',
+    },
+    0x5f: {
+      name: 'BBR5',
+      fn: () => this.bbr(5),
+      mode: 'zeroPage_relative',
+    },
+    0x6f: {
+      name: 'BBR6',
+      fn: () => this.bbr(6),
+      mode: 'zeroPage_relative',
+    },
+    0x7f: {
+      name: 'BBR7',
+      fn: () => this.bbr(7),
+      mode: 'zeroPage_relative',
+    },
 
-    0x8f: { name: 'BBS0', fn: () => this.bbs(0), mode: 'zeroPage_relative' },
-    0x9f: { name: 'BBS1', fn: () => this.bbs(1), mode: 'zeroPage_relative' },
-    0xaf: { name: 'BBS2', fn: () => this.bbs(2), mode: 'zeroPage_relative' },
-    0xbf: { name: 'BBS3', fn: () => this.bbs(3), mode: 'zeroPage_relative' },
-    0xcf: { name: 'BBS4', fn: () => this.bbs(4), mode: 'zeroPage_relative' },
-    0xdf: { name: 'BBS5', fn: () => this.bbs(5), mode: 'zeroPage_relative' },
-    0xef: { name: 'BBS6', fn: () => this.bbs(6), mode: 'zeroPage_relative' },
-    0xff: { name: 'BBS7', fn: () => this.bbs(7), mode: 'zeroPage_relative' },
+    0x8f: {
+      name: 'BBS0',
+      fn: () => this.bbs(0),
+      mode: 'zeroPage_relative',
+    },
+    0x9f: {
+      name: 'BBS1',
+      fn: () => this.bbs(1),
+      mode: 'zeroPage_relative',
+    },
+    0xaf: {
+      name: 'BBS2',
+      fn: () => this.bbs(2),
+      mode: 'zeroPage_relative',
+    },
+    0xbf: {
+      name: 'BBS3',
+      fn: () => this.bbs(3),
+      mode: 'zeroPage_relative',
+    },
+    0xcf: {
+      name: 'BBS4',
+      fn: () => this.bbs(4),
+      mode: 'zeroPage_relative',
+    },
+    0xdf: {
+      name: 'BBS5',
+      fn: () => this.bbs(5),
+      mode: 'zeroPage_relative',
+    },
+    0xef: {
+      name: 'BBS6',
+      fn: () => this.bbs(6),
+      mode: 'zeroPage_relative',
+    },
+    0xff: {
+      name: 'BBS7',
+      fn: () => this.bbs(7),
+      mode: 'zeroPage_relative',
+    },
 
     // BRA
     0x80: { name: 'BRA', fn: () => this.brc(0), mode: 'relative' },
@@ -2614,9 +2682,21 @@ export class CPU6502 {
       fn: () => this.nop(this.readZeroPageX),
       mode: 'immediate',
     },
-    0x5c: { name: 'NOP', fn: () => this.nop(this.readNop), mode: 'absolute' },
-    0xdc: { name: 'NOP', fn: () => this.nop(this.readNop), mode: 'absolute' },
-    0xfc: { name: 'NOP', fn: () => this.nop(this.readNop), mode: 'absolute' },
+    0x5c: {
+      name: 'NOP',
+      fn: () => this.nop(this.readNop),
+      mode: 'absolute',
+    },
+    0xdc: {
+      name: 'NOP',
+      fn: () => this.nop(this.readNop),
+      mode: 'absolute',
+    },
+    0xfc: {
+      name: 'NOP',
+      fn: () => this.nop(this.readNop),
+      mode: 'absolute',
+    },
 
     // PHX
     0xda: { name: 'PHX', fn: () => this.phx(), mode: 'implied' },
@@ -3013,12 +3093,36 @@ export class CPU6502 {
     },
 
     // NOP
-    0x1a: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
-    0x3a: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
-    0x5a: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
-    0x7a: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
-    0xda: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
-    0xfa: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
+    0x1a: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
+    0x3a: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
+    0x5a: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
+    0x7a: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
+    0xda: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
+    0xfa: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
 
     // SKB
     0x80: {
@@ -3255,7 +3359,11 @@ export class CPU6502 {
    * Table of Rockwell 65C02 specific instructions
    */
   OPS_ROCKWELL_65C02: Instructions = {
-    0xcb: { name: 'NOP', fn: () => this.nop(this.implied), mode: 'implied' },
+    0xcb: {
+      name: 'NOP',
+      fn: () => this.nop(this.implied),
+      mode: 'implied',
+    },
     0xdb: {
       name: 'NOP',
       fn: () => this.nop(this.readZeroPageX),
